@@ -1,0 +1,19 @@
+---
+- name: run command and save output
+  hosts: 192.168.100.252
+  connection: network_cli
+  vars:
+    collection_path: /root/.ansible/collections/ansible_collections/ 
+  tasks:
+    - name: run command and save output
+      cisco.ios.ios_command:
+        command: 
+        - show interface
+        - show running-config
+      register: result
+
+    - name: print output to file
+      ansible.builtin.copy:
+              content: "{{result.stdout}}"   
+              dest: /backup/Cisco_Switches_monitor_output/{{ date.stdout }}_at_{{ time.stdout }}_{{ inventory_hostname }} 
+      delagate_to: localhost  

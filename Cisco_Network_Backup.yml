@@ -1,0 +1,17 @@
+---
+        - name:  facts
+                connection: network_cli
+                gather_facts:
+                hosts: Cisco_Network_Backup
+
+                tasks:
+        - name: show run
+                register: result
+                ios_command:
+                commands: show run
+
+        - name: save output 
+                copy:
+                content: "{{ config.stdout[0] }}"
+                dest: "/etc/ansible/backups/show_run_{{ inventory_hostname }}.txt"
+
